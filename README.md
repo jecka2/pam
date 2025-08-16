@@ -24,6 +24,7 @@ C помошью ansible и vagrant  подготавливаем стэнд д�
 
   Работа скрипта
   <details><summary><code>Код выполнения</code></summary>
+
 ```bash 
   jecka   ~/Documents/git/pam  vagrant up                 
 Bringing machine 'pam' up with 'virtualbox' provider...
@@ -106,13 +107,16 @@ PLAY RECAP *********************************************************************
 pam                        : ok=9    changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0  
 
 ```
+<br>
 </ul></details>
+
+<br>
 
 Попробуем  в выходной день зайти польхователм otusadmin которая входт в группу admin  и увидим, что пользователь успешно авторизуется
 ![Вход пользователя кторый входит в  admin](https://raw.githubusercontent.com/jecka2/pam/refs/heads/main/otusadmin.png)
 
 Попробуем  в выходной день зайти польхователм vagrant которая не входт в группу admin  и увидим, что пользовательне может авторизоваться
-![Вход пользователя котрые не входит в  admin](https://raw.githubusercontent.com/jecka2/pam/refs/heads/main/vagrant.png))
+![Вход пользователя котрые не входит в  admin](https://raw.githubusercontent.com/jecka2/pam/refs/heads/main/vagrant.png)
 
 Проверим логи и увидим, что нас не пускает скрипт
-![запускаем у сотрудника](https://raw.githubusercontent.com/jecka2/pam/refs/heads/main/vagrant_log.png))
+![запускаем у сотрудника](https://raw.githubusercontent.com/jecka2/pam/refs/heads/main/vagrant_log.png)
