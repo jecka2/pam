@@ -1,0 +1,61 @@
+---
+- name: Update pam parametrs
+  hosts: all
+  become: true
+  tasks:
+    - name: Create a new system group
+      ansible.builtin.group:
+        name: admin
+        state: present
+
+    - name: Copy file with owner and permissions
+      ansible.builtin.copy:
+       src:  ./pam/
+       dest: /usr/local/bin/
+       owner: root
+       group: root
+       mode: '0777'
+
+    - name: ssh enable use password
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PasswordAuthentication'
+        line: 'PasswordAuthentication yes'
+        backup: true
+
+    - name: Remove file (delete file)
+      ansible.builtin.file:
+        path: /etc/ssh/sshd_config.d/60-cloudimg-settings.conf
+        state: absent
+
+    - name: Restart sshd service
+      ansible.builtin.service:
+       name: sshd
+       state: restarted
+
+
+    - name: insert pam_wheel requirement because it doesnt exist
+      community.general.pamd:
+          name: sshd
+          type: account
+          control: required
+          module_path: pam_nologin.so
+          state: after
+          new_type: auth
+          new_control: required
+          new_module_path: pam_exec.so debug /usr/local/bin/login.sh
+
+    - name: Ensure the 'admin' group exists
+      ansible.builtin.group:
+       name: admin
+       state: present
+
+    - name: Add the user 'otusadmin' with a bash shell, appending the group 'admin' group
+      ansible.builtin.user:
+        name: otusadmin
+        shell: /bin/bash
+        groups: admin
+        update_password: always
+        password: "$6$C3m9O76JFCFzRuCv$PFZq2qoY7/k0mdgOCWbQQ2RC8EMdPF144wgY6fV4Bk0gje2jufxeBNX37DeHlp9Rvs1PRMtNYlJB23uOY31cn/"
+        create_home: true
+        append: true
